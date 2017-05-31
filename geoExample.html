@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title> Geolocation Points </title>
+    <!-- link to style.css -->
+    <link rel='stylesheet' href='geoExample.css'/>
+    <!-- google maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <!-- mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.01" />
+    <!-- j query -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+<!-- initialise google maps -->
+<script type="text/javascript">
+// method to provide map properties
+function initialize() {
+	// get position
+	var myLatlng = new google.maps.LatLng(54.6628224, -6.7461567);
+	var mapOptions = {
+		zoom: 8,
+		center: myLatlng
+	}
+	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+}
+  
+// to launch the map
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>    
+<!-- end of initialise google maps --> 
+
+<!-- google maps box for challenges-->  
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	// ********************* Test Vars **********************
+	/*
+	var markerNum = 5;
+	var locationArr = [["View 1", "Information is provided to the User here.","https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg", 54.584357, -5.944620],
+				["View 2", "Information is provided to the User here.","https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg", 54.584261, -5.944073],
+				["View 3", "Information is provided to the User here.","https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg", 54.584046, -5.943456],
+				["View 4", "Information is provided to the User here.","https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg", 54.584416, -5.942678],
+				["View 5", "Information is provided to the User here.","https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg",54.584736, -5.943585]];
+	*/
+	// ******************************************************
+	
+	// Local Variables
+	var markerNum;
+	var locationArr = [];
+	
+	// Get JSON data
+	$.getJSON('tour.json', function(data) { 
+		// get marker number
+		markerNum = data.markerNum;
+		// get location point data
+		for (i = 0; i < markerNum; i++) {
+			var tempArr = [];
+			tempArr[0] = data.markerLocation[i].title;
+			tempArr[1] = data.markerLocation[i].info;
+			tempArr[2] = data.markerLocation[i].image;
+			tempArr[3] = data.markerLocation[i].latLng[0];
+			tempArr[4] = data.markerLocation[i].latLng[1];
+			locationArr[i] = tempArr;
+		}
+	});
+    
+	// boolean for updating geolocation
+	var boolUpdate = false;
+
+	// Variables for circles and booleans
+	var boolArr = [];
+	var markerArr = [];
+	var circleArr = [];
+	var circleBoundsArr = [];
+	
+	// google nav
+	if (navigator.geolocation) { 
+	
+		navigator.geolocation.getCurrentPosition(function(position) { 
+		
+			// Initialize the Google Maps API v3
+			var map = new google.maps.Map(document.getElementById('map-canvas'), {
+				zoom: 15,
+				mapTypeId: google.maps.MapTypeId.SATELLITE
+			});
+			
+			// create markers and info boxes
+			for (i = 0; i < markerNum; i++) {
+				// booleans to check if User is in circle boundary 
+				boolArr[i] = false;
+				
+				// Create markers
+				var marker = new google.maps.Marker({
+					map: map,
+					position: new google.maps.LatLng(locationArr[i][3], locationArr[i][4]),
+					title: locationArr[i][0],
+					icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+				});
+				
+				// infowindows for each point  
+				var contentStr = "<div id='main' style='width:150px; height:150px'>"
+						+ "<div style='position:absolute; top:0px; left:0px'><img src='"
+						+ locationArr[i][2] + "' height='50' width='50'></div>"
+						+ "<div style='font-weight:normal; position:absolute; top:0px; left:80px'>"
+						+ "<h3 style='color:black;'>" + locationArr[i][0] + "</h3></div>" 
+						+ "<div style='font-weight:normal; position:absolute; top:50px; left:0px'>"						
+						+ "<p style='color:black;'>" + locationArr[i][1] + "</p></div>"
+						+ "</div>";
+				addInfoWindow(marker,contentStr,map);
+				
+				// add to array to get control later
+				markerArr[i] = marker;
+			}
+			
+			// add point circles and the bounds
+			for (i = 0; i < markerNum; i++) {
+				// Add circle overlay and bind to marker
+				var circle = new google.maps.Circle({
+					map: map,
+					radius: 20,    
+					fillColor: '#ffff00'
+				});
+				circle.bindTo('center', markerArr[i], 'position');
+				
+				// get circle bounds
+				var bounds = circle.getBounds();
+				circleBoundsArr[i] = bounds;
+				
+				// add to array to get control later
+				circleArr[i] = circle;
+			}
+			
+			// user location var
+			var markerMe = null;
+			
+			// update geolocation of user
+			function autoUpdate() {
+			
+				navigator.geolocation.getCurrentPosition(function(position) {  
+				
+					// new location update var
+					var newPoint = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+
+					// check if user location is visible
+					if (markerMe) {
+						// Marker already created - Move it
+						markerMe.setPosition(newPoint);
+					} else {
+						// Marker does not exist - Create it
+						markerMe = new google.maps.Marker({
+							position: newPoint,
+							map: map,
+							title: "Me",
+							icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+						});
+					}
+					
+					// Center the map on the new position
+					map.setCenter(newPoint);
+					
+					// check if user in a circle point
+					for (i = 0; i < markerNum; i++) {
+						boolArr[i] = circleBoundsArr[i].contains(newPoint);
+					}
+				
+				}); 
+
+				// change colour of circle if user is in it
+				for (i = 0; i < markerNum; i++) {
+					// check if user is in the waypoint
+					if (boolArr[i] === true) {
+						inPoint(circleArr[i]);
+					}
+				}
+        
+				// check if update continues
+				if (boolUpdate === false) {
+					// Call the autoUpdate() function every 5 seconds
+					setTimeout(autoUpdate, 5000);
+				}
+			
+			}
+			
+			// loop and check again
+			autoUpdate();
+		
+		}); 
+		
+	} else {
+		alert("error - google maps doesn't appear to be available");
+	} 
+        
+	// function to change circle colour 
+	function inPoint(circle) {
+		// change colour
+		circle.setOptions({
+			fillColor: '#00FF00'
+		});
+	} 
+	
+	// function to add info windows
+	function addInfoWindow(marker, message, map) {
+		// add info box to marker
+		var infoWindow = new google.maps.InfoWindow({
+			content: message
+		});
+		google.maps.event.addListener(marker, 'click', function () {
+			infoWindow.open(map, marker);
+		});
+	}
+  
+});
+</script>
+
+<!-- google maps -->
+<div id="map-canvas"> </div>
+
+</body>
+</html>

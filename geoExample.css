@@ -1,0 +1,23 @@
+/**
+* Stylesheet 
+*/
+
+/* Body */
+
+body {
+  margin: 0;
+  padding: 0;
+  //background: #ccc;
+}
+
+/* google maps */
+
+#map-canvas {
+    height: 450px;
+    width: 430px;
+    position: absolute;
+    left: 368px;
+    top: 0px;
+}
+
+

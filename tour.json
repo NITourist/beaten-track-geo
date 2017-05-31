@@ -1,0 +1,34 @@
+{
+	"markerNum": 5,
+	"markerLocation": [{
+			"title": "View 1",
+			"info": "Information is provided to the User here.",
+			"image": "https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg",
+			"latLng": [54.458247, -6.033426]
+		},
+		{
+			"title": "View 2",
+			"info": "Information is provided to the User here.",
+			"image": "https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg",
+			"latLng": [54.584261, -5.944073]
+		},
+		{
+			"title": "View 3",
+			"info": "Information is provided to the User here.",
+			"image": "https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg",
+			"latLng": [54.584046, -5.943456]
+		},
+		{
+			"title": "View 4",
+			"info": "Information is provided to the User here.",
+			"image": "https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg",
+			"latLng": [54.584416, -5.942678]
+		},
+		{
+			"title": "View 5",
+			"info": "Information is provided to the User here.",
+			"image": "https://assets.vice.com/content-images/contentimage/181357/BRAINHARVEYPLAQUE.jpg",
+			"latLng": [54.458189, -6.032973]
+		}
+	]
+}

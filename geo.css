@@ -1,0 +1,315 @@
+
+/**
+* Stylesheet for User Profile webpage
+*/
+
+/* Body */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #ccc;
+}
+
+/* Navigation Bar*/
+
+div nav {
+    //margin: auto;
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 22%;
+}
+
+div nav div {
+    width: 160px;
+    height: 190px;
+    text-align: center;
+}
+
+div nav div {
+    background-color: #4d4a4d;
+    line-height: 40px;
+    border-bottom: 1px solid #888;
+    text-decoration: none;
+    color: #fff;
+    //display: block;
+    transition: .3s background-color;
+    border-bottom: none;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.2em;
+    display: inline-block;
+    margin-right: -5px;
+}
+
+#navText {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1em;
+    text-decoration: none;
+    font-weight: normal;
+    color: #fff;
+    display: block;
+    transition: .3s background-color;
+}
+
+.active {
+    background-color: #496;
+    color: #444;
+    cursor: default;
+}
+
+a:hover {
+    background-color: #496;
+}
+
+/* div boxes */
+
+div {
+    font-family: 'Oswald', sans-serif;
+}
+
+/* club profile div box */
+
+.profileBox {
+    background-color: #fff;
+    width: 798px;
+    height: 580px;
+    position: absolute;
+    top: 50px;
+    left: 22%;
+}
+
+#profileName {
+    background-color: #fff;
+    width: 368px;
+    height: 180px;
+}
+
+#username {
+    position: absolute;
+    top: 20px;
+    left: 150px;
+    color: #4d4a4d;
+    font-weight: bold;
+}
+
+#facebookLink {
+    position: absolute;
+    top: 65px;
+    left: 180px;
+    font-weight: bold;
+}
+
+#twitterLink {
+    position: absolute;
+    top: 95px;
+    left: 180px;
+    font-weight: bold;
+}
+
+#points {
+    position: absolute;
+    top: 120px;
+    left: 150px;
+    color: #4d4a4d;
+    font-weight: bold;
+}
+
+#pictureBox {
+    background-color: #fff;
+    //border-radius: 50px;
+    border:2px solid black;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+}
+
+#addEditBox {
+    background-color: #121265;
+    width: 430px;
+    height: 180px;
+    position: absolute;
+    top: 0px;
+    left: 368px;
+}
+
+#btn1 {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
+
+#btn2 {
+    position: absolute;
+    top: 100px;
+    left: 40px;
+}
+
+#btn3 {
+    position: absolute;
+    top: 40px;
+    left: 200px;
+}
+
+#btn4 {
+    position: absolute;
+    top: 100px;
+    left: 200px;
+}
+
+#clubFollowers {
+    background-color: #4242cc;
+    width: 368px;
+    height: 400px;
+    position: absolute;
+    top: 180px;
+    left: 0px;
+    
+}
+
+#clubMem {
+    position: absolute;
+    top: 80px;
+    left: 70px;
+}
+
+#clubSearch {
+    
+}
+
+#dropDown {
+    width: 200px;
+}
+
+#subTitle {
+    position: absolute;
+    top: 15px;
+    left: 45px;
+    color: #fff;
+}
+
+#newsFrame {
+    position: absolute;
+    top: 204px;
+    left: 406px;
+    height: 350px;
+    width: 350px;
+}
+
+/* challenge div box */
+
+.challengeBox {
+    background-color: #3c3c4f;
+    width: 798px;
+    height: 450px;
+    position: absolute;
+    top: 5%;
+    left: 22%;
+}
+
+#challengeTitle {
+    position: absolute;
+    top: 15px;
+    left: 45px;
+    color: #fff;
+}
+
+#challengeMedals {
+    position: absolute;
+    top: 80px;
+    left: 45px;
+    height: 200px;
+    width: 280px;
+    border: 3px dashed #ccc;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+#changeText1 {
+    position: absolute;
+    top: 300px;
+    left: 45px;
+    height: 20px;
+    width: 280px; 
+}
+
+#changeText2 {
+    position: absolute;
+    top: 330px;
+    left: 45px;
+    height: 30px;
+    width: 280px; 
+}
+
+#changeText3 {
+    position: absolute;
+    top: 370px;
+    left: 45px;
+    height: 20px;
+    width: 280px; 
+}
+
+.style {
+    width:80px;
+    height:80px;
+    border:0px;
+}
+
+.imgView1 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.imgView2 {
+    position: absolute;
+    top: 150px;
+    left: 20px;
+}
+
+.imgView3 {
+    position: absolute;
+    top: 280px;
+    left: 20px;
+}
+
+#rightTxt1 {
+    position: absolute;
+    top: 4px;
+    left: 110px;
+    color: #fff;
+}
+
+#rightTxt2 {
+    position: absolute;
+    top: 134px;
+    left: 110px;
+    color: #fff;
+}
+
+#rightTxt3 {
+    position: absolute;
+    top: 264px;
+    left: 110px;
+    color: #fff;
+}
+
+#startChallenge {
+    position: absolute;
+    top: 410px;
+    left: 145px;
+}
+
+/* google maps */
+
+#map-canvas {
+    height: 450px;
+    width: 430px;
+    position: absolute;
+    left: 368px;
+    top: 0px;
+}
+
+

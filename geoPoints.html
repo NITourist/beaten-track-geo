@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title> Geolocation Points </title>
+    <!-- link to style.css -->
+    <link rel='stylesheet' href='geo.css'/>
+    <!-- google maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <!-- mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.01" />
+    <!-- j query -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+<!-- div box for challenge details -->
+<div class="challengeBox">
+    
+    <h3 id="challengeTitle">challenges</h3>
+    
+    <div id="challengeMedals">
+        <a href="#">
+           <img class = "style imgView1" src="http://skennedy2001.students.cs.qub.ac.uk/4userProfileGoldMedal.png" >
+        </a>
+        <div id="rightTxt1"> <h4>Gold challenge</h4> 
+            <p style="width: 150px;">Earn 300 points completing the task</p>
+        </div>
+        <a href="#">
+           <img class = "style imgView2" src="http://skennedy2001.students.cs.qub.ac.uk/4userProfileSilverMedal.png" >
+        </a>
+        <div id="rightTxt2"> <h4>Silver challenge</h4> 
+            <p style="width: 150px;">Get 200 points from this challenge</p>
+        </div>
+        <a href="#">
+           <img class = "style imgView3" src="http://skennedy2001.students.cs.qub.ac.uk/4userProfileBronzeMedal.png" >
+        </a>
+        <div id="rightTxt3"> <h4>Bronze challenge</h4> 
+            <p style="width: 150px;">Collect 100 points completing this task</p>
+        </div>
+    </div>
+   
+    <textarea id="changeText1" name="changeText1"></textarea>
+    <textarea id="changeText2" name="changeText2"></textarea>
+    <textarea id="changeText3" name="changeText3"></textarea>
+
+    <button id="startChallenge">clear</button>
+ 
+    
+<!-- initialise google maps -->
+<script type="text/javascript">
+// method to provide map properties
+function initialize() {
+  // get position
+  var myLatlng = new google.maps.LatLng(54.6628224, -6.7461567);
+  var mapOptions = {
+    zoom: 8,
+    center: myLatlng
+  }
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  
+  }
+  
+// to launch the map
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>    
+<!-- end of initialise google maps -->    
+      
+<!-- google maps box for challenges-->  
+<script type="text/javascript">
+$(document).ready(function() {
+    
+    // Global Variables
+    var boolClear = false;
+    
+    /**
+    * function to activate waypoints
+    */
+    $(".imgView1").click(function(){
+        
+        // user to change
+        var startLat = 54.458116; 
+        var startLng = -6.032587;
+        var finishLat = 54.457505; 
+        var finishLng = -6.033842;
+        
+        // medal type
+        var medal = "gold";
+        
+        // boolean for clearing
+        boolClear = false;
+        
+         // clear old map
+        document.getElementById('map-canvas').innerHTML = "";
+        document.getElementById("changeText1").innerHTML = "";
+        document.getElementById("changeText2").innerHTML = "";
+        document.getElementById("changeText3").innerHTML = "";
+        
+        // global variables
+        var bool = false;
+        var bool2 = false;
+        var circle;
+        var circle2;
+        var boolC1 = false;
+        var boolC2 = false;
+        var countPoint = 0;
+        
+        if (navigator.geolocation) { 
+        navigator.geolocation.getCurrentPosition(function(position) { 
+        // Initialize the Google Maps API v3
+        var map = new google.maps.Map(document.getElementById('map-canvas'), {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        });
+
+
+        // Create markers
+        var marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(startLat, startLng),
+            title: 'Start Point',
+            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+        });
+
+        var marker2 = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(finishLat, finishLng),
+            title: 'Finish Point',
+            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+        });
+
+        // Add circle overlay and bind to marker
+        circle = new google.maps.Circle({
+            map: map,
+            radius: 40,    
+            fillColor: '#ffff00'
+        });
+
+        circle2 = new google.maps.Circle({
+            map: map,
+            radius: 40,    
+            fillColor: '#ffff00'
+        });
+
+        circle.bindTo('center', marker, 'position');
+        circle2.bindTo('center', marker2, 'position');
+        
+        var bounds = circle.getBounds();
+        var bounds2 = circle2.getBounds();
+        var marker = null;
+  
+        function autoUpdate() {
+            navigator.geolocation.getCurrentPosition(function(position) {  
+            var newPoint = new google.maps.LatLng(position.coords.latitude, 
+                                                position.coords.longitude);
+
+            if (marker) {
+                // Marker already created - Move it
+                marker.setPosition(newPoint);
+            } else {
+                // Marker does not exist - Create it
+                marker = new google.maps.Marker({
+                    position: newPoint,
+                    map: map,
+                    title: "my Location",
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                });
+            }
+
+            // Center the map on the new position
+            map.setCenter(newPoint);
+            
+            document.getElementById("changeText1").innerHTML = "Position 1: " + bounds.contains(newPoint); 
+            document.getElementById("changeText2").innerHTML = "Position 2: " + bounds2.contains(newPoint);
+            bool = bounds.contains(newPoint);
+            bool2 = bounds2.contains(newPoint);
+            
+            }); 
+
+             // check if user is in the waypoint
+            if (bool === true) {
+                inPoint();
+                countPoint = countPoint + 0.5;
+            }
+            if (bool2 === true) {
+                inPoint2();
+                countPoint = countPoint + 0.5;
+            }
+        
+            // check if both waypoints are checked
+            if ((boolC1 === true) && (boolC2 === true) && (countPoint === 1)) {
+                document.getElementById('changeText3').innerHTML = "Success!";
+                confirmPoints();
+            }
+       
+            // check if update continues
+            if (boolClear === false) {
+                // Call the autoUpdate() function every 5 seconds
+                setTimeout(autoUpdate, 5000);
+            }
+        }
+
+        autoUpdate();
+        
+        }); 
+        
+       } else {
+           alert("error - google maps doesn't appear to be available");
+       } 
+        
+       // function to change circle colour 
+       function inPoint() {
+        // change colour
+        circle.setOptions({
+                fillColor: '#00FF00'
+            });
+        // boolean change
+        boolC1 = true;
+       } 
+       
+       // function to change circle colour 
+       function inPoint2() {
+        // change colour
+        circle2.setOptions({
+                fillColor: '#00FF00'
+            });
+        // boolean change
+        boolC2 = true;
+       } 
+       
+       // reward points
+       function confirmPoints() {
+           
+           // success and add points
+           $.ajax({
+                 url:"userProfile_rewardPoints.php",
+                 type:"POST",
+                 async:false,
+                 dataType: "json",
+                 data:{'medal' : medal},
+                 success:function(d){
+                   
+                }
+                });   
+       }
+        
+    });
+    
+    
+    /**
+    * function to activate timed
+    */
+    $(".imgView2").click(function(){
+        
+        // user to change
+        var lat = 54.458219; 
+        var lng = -6.033145;
+        var timeCount = 20000;
+        
+        // medal type
+        var medal = "silver";
+        
+        // boolean for clearing
+        boolClear = false;
+        
+        // clear old map and text boxes
+         document.getElementById('map-canvas').innerHTML = "";
+         document.getElementById("changeText1").innerHTML = "";
+         document.getElementById("changeText2").innerHTML = "";
+         document.getElementById("changeText3").innerHTML = "";
+         
+        // global variables
+        var boolTime = false;
+        var circleTime;
+        var count = 0;
+        var countPoint = 0;
+        
+        if (navigator.geolocation) { 
+            
+        navigator.geolocation.getCurrentPosition(function(position) { 
+        // Initialize the Google Maps API v3
+        var map = new google.maps.Map(document.getElementById('map-canvas'), {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        });
+
+
+         // Create markers
+        var marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(lat, lng),
+            title: 'Timed Area',
+            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        });
+
+        // Add circle overlay and bind to marker
+        circleTime = new google.maps.Circle({
+            map: map,
+            radius: 40,    
+            fillColor: '#ff0000'
+        });
+        circleTime.bindTo('center', marker, 'position');
+    
+        var boundsTime = circleTime.getBounds();
+        var marker = null;
+        
+        document.getElementById("changeText2").innerHTML = "Goal: " + timeCount/60000 + " min/s";
+  
+        function autoUpdate() {
+            navigator.geolocation.getCurrentPosition(function(position) {  
+            var newPoint = new google.maps.LatLng(position.coords.latitude, 
+                                                position.coords.longitude);
+
+            if (marker) {
+            // Marker already created - Move it
+            marker.setPosition(newPoint);
+            } else {
+            // Marker does not exist - Create it
+            marker = new google.maps.Marker({
+                position: newPoint,
+                map: map,
+                title: "my Location",
+                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            });
+            }
+
+            // Center the map on the new position
+            map.setCenter(newPoint);
+       
+            document.getElementById('changeText1').innerHTML = "Position: " +  
+                    boundsTime.contains(newPoint);
+            boolTime = boundsTime.contains(newPoint);
+       
+            }); 
+            
+            if (boolTime === true){
+                timer(); 
+                countPoint = countPoint + 1;
+            }
+            
+            if (boolClear === false) {
+                // Call the autoUpdate() function every 3 secs
+                setTimeout(autoUpdate, 3000);
+            }
+        }
+       
+        autoUpdate();
+        
+        }); 
+        
+        } else {
+            alert("error - google maps doesn't appear to be available");
+        } 
+        
+        // function to begin timer 
+        function timer(){
+            
+        // check to activate one countdown
+        if (countPoint === 1) {
+            // timer function
+            setTimeout(function(){ 
+           
+           // success and add points
+           document.getElementById('changeText3').innerHTML = "Success!";
+           // call to server
+            $.ajax({
+                 url:"userProfile_rewardPoints.php",
+                 type:"POST",
+                 async:false,
+                 dataType: "json",
+                 data:{'medal' : medal},
+                 success:function(d){
+                   
+                }
+             });   
+            
+            // set the circle green
+            circleTime.setOptions({
+                fillColor: '#00FF00'
+            });
+            // 20 sec counter
+            }, timeCount);  
+        }
+        }
+      
+    });
+
+
+    /**
+    * function to activate distance tracker
+    */
+    $(".imgView3").click(function(){
+        
+        // user to change
+        var goalCount = 1.00;
+        
+        // boolean for clearing
+        boolClear = false;
+        
+        // medal type
+        var medal = "bronze";
+        
+         // clear old map and text boxes
+         document.getElementById('map-canvas').innerHTML = "";
+         document.getElementById("changeText1").innerHTML = "";
+         document.getElementById("changeText2").innerHTML = "";
+         document.getElementById("changeText3").innerHTML = "";
+         
+         // local variables 
+        var linePath;
+        var lineArray = [];
+        var map;
+        var curLat;
+        var curLng;
+        var count = 0;
+         
+        if (navigator.geolocation) { 
+            
+        navigator.geolocation.getCurrentPosition(function(position) { 
+        // Initialize the Google Maps API v3
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        });
+
+        var marker = null;
+        
+        //document.getElementById('changeText1').innerHTML = position.coords.latitude 
+        //        + " " + position.coords.longitude;
+        document.getElementById('changeText1').innerHTML = "Goal: " + goalCount + " mile/s";
+          
+        function autoUpdate() {
+            navigator.geolocation.getCurrentPosition(function(position) {  
+            var newPoint = new google.maps.LatLng(position.coords.latitude, 
+                                                position.coords.longitude);
+
+            if (marker) {
+            // Marker already created - Move it
+            marker.setPosition(newPoint);
+            } else {
+            // Marker does not exist - Create it
+            marker = new google.maps.Marker({
+                position: newPoint,
+                map: map,
+                title: "my Location",
+                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            });
+            }
+
+            // Center the map on the new position
+            map.setCenter(newPoint);
+            
+            curLat = position.coords.latitude;
+            curLng = position.coords.longitude;
+            
+            document.getElementById('changeText2').innerHTML = "Pos: " + position.coords.latitude 
+                   + " " + position.coords.longitude;
+           
+            document.getElementById('changeText3').innerHTML = "Current: " + count*0.000621371192;
+            
+            // draw polyline of your route
+            drawLine();
+            // calculate the distance
+            calculateDistance();
+       
+            
+            }); 
+            
+            // check if the goalCount is reached
+            if (count === goalCount) {
+                
+                // print success
+                document.getElementById('changeText1').innerHTML = "Success!"; 
+                
+                // success and add points
+                $.ajax({
+                 url:"userProfile_rewardPoints.php",
+                 type:"POST",
+                 async:false,
+                 dataType: "json",
+                 data:{'medal' : medal},
+                 success:function(d){
+                  
+                }
+                });   
+            }
+            
+            if (boolClear === false) {
+                // Call the autoUpdate() function every 3 secs
+                setTimeout(autoUpdate, 3000);
+            }
+        }
+        
+        
+           autoUpdate();
+        
+        
+        }); 
+        
+        } else {
+            alert("error - google maps doesn't appear to be available");
+        } 
+         
+         
+         /**
+         * function to draw a polyline of the user's route
+         */
+        function drawLine() {
+            //storeInArray(curLat, curLng, lineArray);
+            lineArray.push({lat: curLat, lng: curLng});
+            linePath = new google.maps.Polyline({
+                path: lineArray,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2, 
+            });
+
+            linePath.setMap(map);
+        }
+        
+        
+        /**
+         * function to calculate the distance of the 
+         * drawn polyline
+         */
+        function calculateDistance() {
+          var curPath = linePath.getPath();
+          count = google.maps.geometry.spherical.computeLength(curPath);   
+        }
+      
+    });
+    
+    /**
+     * function to clear a challenge
+     */
+    $("#startChallenge").click(function(){
+        
+        // bool to stop auto update geolocation
+        boolClear = true;
+        
+        // clear text boxes
+        setTimeout(function () {
+        document.getElementById('map-canvas').innerHTML = "";
+        document.getElementById("changeText1").innerHTML = "";
+        document.getElementById("changeText2").innerHTML = "";
+        document.getElementById("changeText3").innerHTML = "";
+        }, 2000);
+        
+    });
+
+//****************
+ });
+</script>
+
+
+
+<!-- google maps -->
+<div id="map-canvas"> </div>
+<!-- end of google maps box for challenges-->  
+</div>
+ 
+</body>
+</html>
